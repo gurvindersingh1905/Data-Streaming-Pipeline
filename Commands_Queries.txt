@@ -1,0 +1,69 @@
+#To start zkServer (zookeeper)
+sudo bin/zkServer.sh start
+
+#To start kafka-server 
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+#Create kafka topic
+.\bin\windows\kafka-topics.bat -—create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic
+
+#Start kafka-consumer
+.\bin\windows\kafka-console-consumer.bat --zookeeper localhost:2181 --topic testTopic --from-beginning
+
+----------------------------
+
+##HBASE commands
+#Restart hbase master and region servers
+sudo service hbase-master restart
+sudo service hbase-regionserver restart
+
+#create hbase table
+hbase shell
+create 'testhbase','data'
+
+------------------------
+
+##Impala commands
+#Start/Restart Impala deamons
+sudo service impala-state-store start
+sudo service impala-catalog start
+sudo service impala-server start
+
+#Create impala/hive table
+hive
+
+create database hbase;
+use hbase;
+
+CREATE EXTERNAL TABLE testImpala
+(
+id string,
+deviceId string,
+temperature string,
+locLatitude string,
+locLongitude string,
+time string
+)
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+WITH SERDEPROPERTIES (
+"hbase.columns.mapping" = 
+":key,data:deviceId,data:temperature,data:locLatitude,data:locLongitude,data:time"
+)
+TBLPROPERTIES ("hbase.table.name"="testhbase");
+
+#Execute aggregation queries in Impala
+impala shell
+invalidate metadata hbase.testImpala; 
+
+#1
+select deviceid, max(temperature) AS MaxTemp  from hbase.testImpala group by deviceid;
+#2
+select deviceid, count(id) AS count_data_point  from hbase.testImpala group by deviceid;
+#3
+select deviceid, max(temperature) as max_temp from hbase.testImpala where to_date(time) = '2018-05-06' group by deviceid;
+
+
+
+
+
+
