@@ -13,7 +13,7 @@ public class IOTSimulator {
         Data data = new Data();
         data.setDeviceId(deviceId);
         data.setLocation(location);
-        data.setTemperature((int)Math.floor(10+Math.random()*(18-10+1)));
+        data.setTemperature(Double.toString(Math.floor(10+Math.random()*(18-10+1))));
         data.setTime(Long.toString(System.currentTimeMillis()));
 
         IOTModel iot = new IOTModel();
