@@ -21,7 +21,7 @@ sudo service hbase-regionserver restart
 hbase shell
 create 'testhbase','data'
 
-------------------------
+---------------------------
 
 ##Impala commands
 #Start/Restart Impala deamons
