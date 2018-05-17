@@ -2,7 +2,7 @@ package Model;
 
 public class Data {
     public String deviceId;
-    public int temperature;
+    public String temperature;
     public Location location;
     public String time;
 
@@ -14,11 +14,11 @@ public class Data {
         this.deviceId = deviceId;
     }
 
-    public int getTemperature() {
+    public String getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(int temperature) {
+    public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
 
